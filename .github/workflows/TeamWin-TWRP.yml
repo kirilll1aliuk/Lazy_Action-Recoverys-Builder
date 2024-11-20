@@ -184,7 +184,7 @@ jobs:
         echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
       
     - name: Upload to Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@master
       with:
         files: |
           android-recovery/out/target/product/${{ env.DEVICE_NAME }}/${{ inputs.BUILD_TARGET }}.img
