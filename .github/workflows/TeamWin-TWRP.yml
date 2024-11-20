@@ -169,24 +169,21 @@ jobs:
         lunch ${{ env.DEVICE_MAKEFILE }}-eng && make clean && make ${{ inputs.BUILD_TARGET }}image -j$(nproc --all)
         echo "Done building your ${{ inputs.BUILD_TARGET }}.img"
 
-    - name: Set build target for upload
+    - name: Set Build Date # Output will be use in Release
       run: |
-        if [ ${{ inputs.BUILD_TARGET }} == 'recovery' ]; then
-           echo "BUILD_TARGET_NAME=recovery" >> $GITHUB_ENV
-        elif [ ${{ inputs.BUILD_TARGET }} == 'boot' ]; then
-           echo "BUILD_TARGET_NAME=boot" >> $GITHUB_ENV
-        else
-           echo "BUILD_TARGET_NAME=vendor_boot" >> $GITHUB_ENV
-        fi
-      
-        - name: Create release
-        continue-on-error: true
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ env.RELEASE_TAG }}
-          files: ${{ env.RELEASE_FILE }}
-          generate_release_notes: true
+        echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
 
+    - name: Upload to Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          android-recovery/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ env.BUILD_TARGET_NAME }}.img
+        name: Unofficial TWRP for ${{ github.event.inputs.DEVICE_NAME }} // ${{ env.BUILD_DATE }}
+        tag_name: ${{ github.run_id }}
+        body: |
+          Build: ${{ github.event.inputs.MANIFEST_BRANCH }}
+          Device: [Device Tree/Branch](${{ github.event.inputs.DEVICE_TREE }}/tree/${{ github.event.inputs.DEVICE_TREE_BRANCH }})
+          Commit: Most recent [commit](${{ github.event.inputs.DEVICE_TREE }}/commit/${{ env.COMMIT_ID }}) during building.
 
     - name: Run LDCheck
       if: inputs.LDCHECK == 'true'
