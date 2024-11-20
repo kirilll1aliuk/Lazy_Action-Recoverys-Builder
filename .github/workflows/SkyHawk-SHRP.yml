@@ -181,9 +181,9 @@ jobs:
       uses: softprops/action-gh-release@master
       with:
         files: |
-          android-recovery/out/target/product/${{ env.renoir }}/${{ env.BUILD_TARGET_NAME }}.img
-          android-recovery/out/target/product/${{ env.renoir }}/SHRP*.zip
-          android-recovery/out/target/product/${{ env.renoir }}/ramdisk-recovery.*
+          android-recovery/out/target/product/${{ env.DEVICE_renoir }}/${{ env.BUILD_TARGET_NAME }}.img
+          android-recovery/out/target/product/${{ env.DEVICE_renoir }}/SHRP*.zip
+          android-recovery/out/target/product/${{ env.DEVICE_renoir }}/ramdisk-recovery.*
         name: Unofficial SHRP For ${{ env.DEVICE_NAME }} // ${{ env.BUILD_DATE }}
         tag_name: ${{ github.run_id }}
         body: |
