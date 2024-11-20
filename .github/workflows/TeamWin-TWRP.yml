@@ -178,10 +178,6 @@ jobs:
         else
            echo "BUILD_TARGET_NAME=vendor_boot" >> $GITHUB_ENV
         fi
-
-    - name: Set Build Date # Output will be use in Release
-      run: |
-        echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
       
         - name: Create release
         continue-on-error: true
